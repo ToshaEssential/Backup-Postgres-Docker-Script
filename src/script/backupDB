@@ -1,0 +1,20 @@
+#! /bin/bash
+iterationBackup=0
+function backup(){
+echo "Starting a backup"
+currectTime=`date +%Y%m%d-%H%M%S`
+docker export 1f4d382882bd > /pathSave/backups/postgres$currectTime.tar
+echo "Backup done $currectTime"
+backupAmount=`ls /pathSave/backups/ | wc -l`
+echo "Number of files: $backupAmount:"
+if (($backupAmount > 3));then
+echo "More than 3. Clearing unnecessary backups older than 36 hours."
+find /pathSave/backups/ -mmin +2160 -type f -exec rm -fv {} \;
+ls -l /pathSave/backups/
+fi
+iterationBackup=$(($iterationBackup+1))
+echo "Backups in a row: $iterationBackup"
+sleep 43200
+backup
+}
+backup

@@ -1,0 +1,12 @@
+# SystemD /etc/system.d/system/
+
+[Unit]
+Description = Backup docker postgres script
+
+[Service]
+RemainAfterExit=true
+ExecStart=/usr/local/bin/backupDB
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
